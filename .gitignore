@@ -1,0 +1,12 @@
+data/raw/
+data/cache/
+data/processed/
+*.tar.gz
+__pycache__/
+*.pyc
+notebooks/*.executed.ipynb
+.ipynb_checkpoints/
+msnoise_live/
+msnoise_project*/
+data/sds/
+data/sds_teaching/

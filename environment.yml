@@ -1,0 +1,56 @@
+# Etna ambient-noise practical -- conda environment
+#
+# Create it with:
+#     conda env create -f environment.yml
+#     conda activate etna-noise
+#
+# Versions are pinned to minor releases that were tested together on
+# 2026-11-17 (obspy 1.5.1 / numpy 2.5.x / scipy 1.18.1 / matplotlib 3.11.2).
+# If conda is slow, see SETUP.md: the mamba/miniforge route takes ~2 minutes
+# instead of ~10.
+#
+# Nothing extra is needed for the phase cross-correlation (etnalib/pcc2.py)
+# or the MWCS dv/v (etnalib/mwcs.py): both are pure numpy + scipy. In
+# particular neither `phasecorr` nor a compiled FastPCC is required.
+name: etna-noise
+channels:
+  - conda-forge
+dependencies:
+  - python=3.12
+  - numpy>=2.0,<3
+  - scipy>=1.13
+  - matplotlib>=3.8
+  # Pinned exactly: conda-forge also carries 1.5.1rc1, and an explicit pin
+  # removes any chance of a student ending up on the release candidate.
+  # Verified present for linux-64, osx-64, osx-arm64 and win-64 on 2026-11-16.
+  - obspy=1.5.1
+  - pandas>=2.0
+  - jupyterlab>=4.0
+  - ipykernel
+  - ipympl
+  - tqdm
+  - requests
+  - pytest
+
+  # ---------------------------------------------------------------- MSNoise
+  # The autocorrelation and single-station cross-components are computed with
+  # MSNoise 1.6.5, the current release (master is NOT used: several stages
+  # are broken there, and a git commit cannot be pinned in a file a
+  # first-time conda user has to run).
+  #
+  # The two pins below are NOT optional and NOT cosmetic. conda-forge's
+  # msnoise package declares bare `sqlalchemy` and `setuptools`, so a fresh
+  # solve picks the newest of each and MSNoise then fails:
+  #
+  #   sqlalchemy >= 2.0  ->  `msnoise new_jobs` dies with
+  #                          "'Engine' object has no attribute 'execute'"
+  #                          (api.py:788 uses the 1.x Engine API)
+  #   setuptools >= 81   ->  every msnoise command dies at import with
+  #                          "No module named 'pkg_resources'"
+  #
+  # Both were reproduced on 2026-11-16 and both are silent until you hit the
+  # stage that uses them, which is why they are pinned here rather than
+  # discovered in a classroom.
+  - msnoise=1.6.5
+  - sqlalchemy<2
+  - setuptools<81

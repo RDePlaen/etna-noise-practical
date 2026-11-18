@@ -1,0 +1,41 @@
+# Etna ambient-noise practical -- FALLBACK environment (no MSNoise)
+#
+# Create it with:
+#     conda env create -f environment-minimal.yml
+#     conda activate etna-noise-minimal
+#
+# Versions are pinned to minor releases that were tested together on
+# 2026-11-16 (obspy 1.5.1 / numpy 2.5.3 / scipy 1.18.1 / matplotlib 3.11.2).
+# If conda is slow, see SETUP.md: the mamba/miniforge route takes ~2 minutes
+# instead of ~10.
+name: etna-noise-minimal
+channels:
+  - conda-forge
+dependencies:
+  - python=3.12
+  - numpy>=2.0,<3
+  - scipy>=1.13
+  - matplotlib>=3.8
+  # Pinned exactly: conda-forge also carries 1.5.1rc1, and an explicit pin
+  # removes any chance of a student ending up on the release candidate.
+  # Verified present for linux-64, osx-64, osx-arm64 and win-64 on 2026-11-16.
+  - obspy=1.5.1
+  - pandas>=2.0
+  - jupyterlab>=4.0
+  - ipykernel
+  - ipympl
+  - tqdm
+  - requests
+  - pytest
+
+  # No MSNoise here on purpose.
+  #
+  # This is the FALLBACK environment. Use it if `environment.yml` fails to
+  # solve or takes forever: MSNoise 1.6.5 needs sqlalchemy<2 and
+  # setuptools<81, and those two downgrades are the only things in the full
+  # environment that can make a solve awkward.
+  #
+  # Nothing in notebooks 01-04 imports MSNoise. The autocorrelations and
+  # cross-components were COMPUTED with MSNoise offline and ship as
+  # data/processed/daily_acf.npz, so the practical is identical either way.
+  # You only need the full environment to re-run notebook 00.

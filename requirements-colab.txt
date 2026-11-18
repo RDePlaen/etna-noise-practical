@@ -1,0 +1,14 @@
+# Plan B: Google Colab. Paste into the first cell as
+#     !pip install -q obspy==1.5.1
+# MSNoise needs these exact bounds; see environment.yml for why.
+msnoise==1.6.5
+sqlalchemy<2
+setuptools<81
+# Colab already ships numpy, scipy, matplotlib and pandas at compatible
+# versions (checked 2026-11-16 against numpy 2.5.x), so obspy is the only
+# install needed and it is a binary wheel -- about 20-40 s, no compiler.
+obspy==1.5.1
+# MSNoise needs these exact bounds; see environment.yml for why.
+msnoise==1.6.5
+sqlalchemy<2
+setuptools<81
